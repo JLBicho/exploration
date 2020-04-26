@@ -67,8 +67,8 @@ public:
 		green_.b = 0.0;
 		green_.a = 1.0;
 		// RGBA color Red
-		red_.r = 0.0;
-		red_.g = 1.0;
+		red_.r = 1.0;
+		red_.g = 0.0;
 		red_.b = 0.0;
 		red_.a = 1.0;
 
@@ -141,8 +141,8 @@ public:
 		
 		// Generates de grid
 		// dX, dY represent the size of the grid, in each axis
-		double dX = 0.4;
-		double dY = 0.4;
+		double dX = 0.35;
+		double dY = 0.35;
 
 		// Auxiliary variables
 		geometry_msgs::Point newPoint;
