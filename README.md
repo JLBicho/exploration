@@ -18,7 +18,7 @@ src
 <b>exploration_node.cpp</b>
   - Subs:
     - /clicked_point (geometry_msgs::PointStamped): points clicked in Rviz that conform the polygon 
-    - /start (std_msgs::String): publsih 'start' to begin grid generator
+    - /start (std_msgs::String): publish 'start' to begin grid generator
   - Pubs:
     - /exploration_zone (geomerty_msgs::PolygonStamped): polygon of the zone
     - /points (visualization_msgs::Marker): markers of the points
