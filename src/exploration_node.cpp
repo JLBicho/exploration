@@ -160,7 +160,7 @@ public:
 					points_.points.push_back(newPoint);
 
 					// Check if the newPoint is inside. If it is, then green and it is used in the path. If not, then red and not used.
-					if(inside(newPoint, exploration_zone_, down_left)){
+					if(isInside(newPoint, exploration_zone_, down_left)){
 						grid_.push_back(newPoint);
 						p.pose.position = newPoint;
 						path_.poses.push_back(p);
@@ -175,7 +175,7 @@ public:
 					newPoint.x = i;
 					newPoint.y = j;
 					points_.points.push_back(newPoint);
-					if(inside(newPoint, exploration_zone_, down_left)){
+					if(isInside(newPoint, exploration_zone_, down_left)){
 						grid_.push_back(newPoint);
 						p.pose.position = newPoint;
 						path_.poses.push_back(p);
@@ -193,20 +193,29 @@ public:
 		tf2::Quaternion q2;
 		q2.setRPY(0,0,0);
 		q2.normalize();
-		tf2::convert(q2,path_.poses[0].pose.orientation);
 
-		for (std::vector<geometry_msgs::PoseStamped>::iterator it = path_.poses.begin()+1; it != path_.poses.end(); it++){
-			double yaw = atan2(it->pose.position.y-(it-1)->pose.position.y,it->pose.position.x-(it-1)->pose.position.x);
+		/* DEPRECATED */
+		//tf2::convert(q2,path_.poses[0].pose.orientation);
+		//for (std::vector<geometry_msgs::PoseStamped>::iterator it = path_.poses.begin()+1; it != path_.poses.end(); it++){
+		
+		for (std::vector<geometry_msgs::PoseStamped>::iterator it = path_.poses.begin(); it != path_.poses.end(); it++){
+			double yaw = 0.0;
+			if (it == path_.poses.end()-1){
+				yaw = atan2(it->pose.position.y-(it-1)->pose.position.y,it->pose.position.x-(it-1)->pose.position.x);
+			}else{
+				yaw = atan2(-it->pose.position.y+(it+1)->pose.position.y,-it->pose.position.x+(it+1)->pose.position.x);
+			}
 			q2.setRPY(0,0,yaw);
 			q2.normalize();
 			tf2::convert(q2,it->pose.orientation);
 		}
 
+
 		pub_path_.publish(path_);
 	}
 	
 	/* Checks if the point is inside using Ray Tracing algorithm. Traces a ray between the point and an external point */
-	bool inside(geometry_msgs::Point pt, geometry_msgs::PolygonStamped poly, geometry_msgs::Point down_left){
+	bool isInside(geometry_msgs::Point pt, geometry_msgs::PolygonStamped poly, geometry_msgs::Point down_left){
 		int count_down = 0;
 
 		// The exterior point is created by taking some distance from the most down and left point of the rectangle around the zone
